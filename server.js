@@ -12,27 +12,39 @@ const user_options = [
     type: "list",
     name: "userOptions",
     message: "Select an operation for employee CMS:", 
-    choices: ["View all departments", "View all roles", "View all employees", "Add a Department", "Add a Role", "Add an employee", "Update Role for an employee", "Exit"],
+    choices: [ "View all departments", "View all roles", "View all employees", "Add a Department", "Add a Role", 
+              "Add an employee", "Update Role for an employee", "Exit"],
+    pageSize: 15,
   }];
 
 department = new Department(inquirer, db);
+roles = new Roles(inquirer, db); 
+employee = new Employee(inquirer, db);
+
 async function main(){
   const selectedOption = await inquirer.prompt(user_options);
   console.log(selectedOption.userOptions);
   switch(selectedOption.userOptions){
     case "View all departments":
       (async() => {
-        const result =  await department.getDepartments(true);  
-        console.table(result);
-        console.log("hello");
-        await db.endConnection();
+        const result =  await department.getAllDepartments();  
+        console.table(result);      
       })()
+    main();
     break;
     case "View all roles":
-    //main();
+      (async() => {
+        const result =  await roles.getAllRoles();  
+        console.table(result);
+      })()
+    main();
     break;
     case "View all employees":
-    //main();
+      (async() => {
+        const result =  await employee.getAllEmployees();  
+        console.table(result);   
+      })()
+    main();
     break;
     case "Add a department":
     //main();
@@ -43,13 +55,15 @@ async function main(){
     case "Add an employee":
     //main();
     break; 
+    case "Update Role for an employe":
+    break;
     case "Exit":
+      (async() => {
+      await db.endConnection();
+      })()
     break;
     default: break;          
-  }
-  if (selectedOption.userOptions != "Exit"){
-     await main();
-  }
+  }  
 };
 
 main();
