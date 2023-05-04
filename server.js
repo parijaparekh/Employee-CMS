@@ -14,8 +14,8 @@ const user_options = [
     name: "userOptions",
     message: "Select an operation for employee CMS:", 
     choices: [ "View all departments", "View all roles", "View all employees", "Add a department", "Add a Role", 
-              "Add an employee", "Update Role for an employee", "Exit"],
-    pageSize: 15,
+              "Add an employee", "Update Role for an employee", "Delete a Department", "Delete a Employee", "Delete a Role", "Update Employee Managers", "View Employees by Manager", "View Employees by Department", "Total utilized budget of a department", "Exit"],
+    pageSize: 25,
   }];
 
 department = new Department(inquirer, db);
@@ -24,7 +24,7 @@ employee = new Employee(inquirer, db);
 
 function convertDBResultToInqChoices (result, fields){
   let x = 0;
-  let alphabets = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
+  let alphabets = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w'];
   //console.log(result);
   //console.log(typeof result);
   result.forEach(jsonObj => {
@@ -32,7 +32,7 @@ function convertDBResultToInqChoices (result, fields){
     jsonObj["value"] = jsonObj[fields["value"]];
     jsonObj["key"] = alphabets[x++]; 
   });
-  console.log(result);
+  //console.log(result);
 };
 
 async function main(){
@@ -65,7 +65,7 @@ async function main(){
       console.log("Department");
       (async() => {
         const result =  await department.addDepartment();  
-        console.table(result); 
+        //console.table(result); 
         main();
       })()
     break;
@@ -73,13 +73,14 @@ async function main(){
       (async() => {
         const departmentList =  await department.getAllDepartments();
         convertDBResultToInqChoices(departmentList,{"name": "dept_name", "value": "id"});
+        console.log(departmentList);
         const result =  await roles.addRole(departmentList);   
         main();
       })()
     break;
     case "Add an employee":
       (async() => {
-        const rolesList =  await department.getAllRoles();
+        const rolesList =  await roles.getAllRoles();
         const employeeList = await employee.getAllManagers();
         convertDBResultToInqChoices(rolesList,{"name": "title", "value": "id"});
         convertDBResultToInqChoices(employeeList,{"name": "employee_name", "value": "id"});
@@ -87,9 +88,66 @@ async function main(){
         main();
       })()
     //main();
-    break; 
-    case "Update Role for an employe":
     break;
+    case "Delete a Department":
+      (async() => {
+        const departmentList =  await department.getAllDepartments();
+        console.log(departmentList);
+        convertDBResultToInqChoices(departmentList,{"name": "dept_name", "value": "id"});
+        const result =  await department.removeDepartment(departmentList);   
+        main();
+      })()
+    break;
+    case "Delete a Employee":
+      (async() => {
+        const employeeList =  await employee.getAllEmployees();
+        console.log(employeeList);
+        convertDBResultToInqChoices(employeeList,{"name": "employee_name",  "value": "id"});
+        const result =  await employee.removeEmployee(employeeList);   
+        main();
+      })()
+    break; 
+    
+    case "Delete a Role":
+      (async() => {
+        const roleList =  await roles.getAllRoles();
+        convertDBResultToInqChoices(roleList,{"name": "title",  "value": "id"});
+        const result =  await roles.removeRole(roleList);   
+        main();
+      })()
+    break;
+
+    case "Update Role for an employee":
+      (async() => {
+        const roleList = await roles.getAllRoles();
+        const employeeList = await employee.getAllEmployees();
+        convertDBResultToInqChoices(employeeList, {"name":"employee_name", "value": "id"});
+        convertDBResultToInqChoices(roleList,{"name": "title",  "value": "id"});
+        const result = await employee.updateRole(employeeList, roleList);
+        main();
+      })()
+    break;
+
+    case "View Employees by Manager":
+      (async() => {
+        const managerList = await employee.getAllManagers();
+        convertDBResultToInqChoices(managerList, {"name":"employee_name", "value": "id"});
+        const result = await employee.getEmployeesByManager(managerList);
+        console.table(result);
+        main();
+      })()
+    break;
+
+    case "View Employees by Department":
+      (async() => {
+        const departmentList = await department.getAllDepartments();
+        convertDBResultToInqChoices(departmentList,{"name": "dept_name", "value": "id"});
+        const result = await employee.getEmployeesByDepartment(departmentList);
+        console.table(result);
+        main();
+      })()
+    break;
+
     case "Exit":
       (async() => {
       await db.endConnection();
