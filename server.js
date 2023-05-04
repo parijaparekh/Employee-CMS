@@ -46,6 +46,7 @@ async function main(){
         main();     
       })()
     break;
+    
     case "View all roles":
       (async() => {
         const result =  await roles.getAllRoles();  
@@ -53,14 +54,15 @@ async function main(){
         main();
       })()
     break;
+    
     case "View all employees":
       (async() => {
         const result =  await employee.getAllEmployees();  
         console.table(result); 
         main();  
       })()
-    //main();
     break;
+    
     case "Add a department":
       console.log("Department");
       (async() => {
@@ -69,6 +71,7 @@ async function main(){
         main();
       })()
     break;
+    
     case "Add a Role":
       (async() => {
         const departmentList =  await department.getAllDepartments();
@@ -78,6 +81,7 @@ async function main(){
         main();
       })()
     break;
+    
     case "Add an employee":
       (async() => {
         const rolesList =  await roles.getAllRoles();
@@ -87,8 +91,8 @@ async function main(){
         const result =  await employee.addEmployee(rolesList, employeeList);   
         main();
       })()
-    //main();
     break;
+
     case "Delete a Department":
       (async() => {
         const departmentList =  await department.getAllDepartments();
@@ -98,6 +102,7 @@ async function main(){
         main();
       })()
     break;
+
     case "Delete a Employee":
       (async() => {
         const employeeList =  await employee.getAllEmployees();
@@ -147,12 +152,27 @@ async function main(){
         main();
       })()
     break;
+    
+    case "Update Employee Managers":
+      (async() => {
+        const employeeList = await employee.getAllEmployees();
+        convertDBResultToInqChoices(employeeList, {"name":"employee_name", "value": "id"});
+        const managerList = await employee.getAllManagers();
+        convertDBResultToInqChoices(managerList, {"name":"employee_name", "value": "id"});
+        const result = await employee.updateManager(employeeList, managerList);
+        main();
+      })()
+    break;
+
+    case "Total utilized budget of a department":
+    break;
 
     case "Exit":
       (async() => {
-      await db.endConnection();
+        await db.endConnection();
       })()
     break;
+
     default: break;          
   }  
 };
