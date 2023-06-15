@@ -64,7 +64,7 @@ async function main(){
     break;
     
     case "Add a department":
-      console.log("Department");
+      //console.log("Department");
       (async() => {
         const result =  await department.addDepartment();  
         //console.table(result); 
@@ -76,7 +76,7 @@ async function main(){
       (async() => {
         const departmentList =  await department.getAllDepartments();
         convertDBResultToInqChoices(departmentList,{"name": "dept_name", "value": "id"});
-        console.log(departmentList);
+        //console.log(departmentList);
         const result =  await roles.addRole(departmentList);   
         main();
       })()
@@ -106,7 +106,7 @@ async function main(){
     case "Delete a Employee":
       (async() => {
         const employeeList =  await employee.getAllEmployees();
-        console.log(employeeList);
+        //console.log(employeeList);
         convertDBResultToInqChoices(employeeList,{"name": "employee_name",  "value": "id"});
         const result =  await employee.removeEmployee(employeeList);   
         main();

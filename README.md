@@ -14,7 +14,7 @@ This is a command line application for an employee content management system. It
 
 ### Deliverables: 10%
 
-* [Walkthrough Video Link]()
+* [Walkthrough Video Link](https://drive.google.com/file/d/1WAsNEr1ckc9IC4ddXmsu_ELn1w56SxQ7/view)
 
 - - -
 © 2022 Trilogy Education Services, LLC, a 2U, Inc. brand. Confidential and Proprietary. All Rights Reserved.
