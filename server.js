@@ -165,6 +165,14 @@ async function main(){
     break;
 
     case "Total utilized budget of a department":
+      (async() => {
+        const departmentList =  await department.getAllDepartments();
+        //console.log(departmentList);
+        convertDBResultToInqChoices(departmentList,{"name": "dept_name", "value": "id"});
+        const result =  await department.budgetForDepartment(departmentList);   
+        console.log(result);
+        main();
+      })()
     break;
 
     case "Exit":
