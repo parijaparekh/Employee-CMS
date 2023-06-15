@@ -170,7 +170,7 @@ async function main(){
         //console.log(departmentList);
         convertDBResultToInqChoices(departmentList,{"name": "dept_name", "value": "id"});
         const result =  await department.budgetForDepartment(departmentList);   
-        console.log(result);
+        console.table(result);
         main();
       })()
     break;
